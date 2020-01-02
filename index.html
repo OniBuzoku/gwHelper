@@ -1,0 +1,1500 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
+    <style>
+        .hero-icon {
+            height: 24px;
+            width: 24px;
+            border: 2px solid #000;
+            border-radius: 50%;
+            margin-right: 10px;
+            background: #fff;
+        }
+        .arti-icon {
+            height: 24px;
+            width: auto;
+            margin-right: 10px;
+        }
+        .table-enemy .hero-icon {
+            border-color: red;
+        }
+        input[type=number] {
+            width: 90px;
+        }
+        .table span {
+            line-height: 36px;
+        }
+        .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+            width: 100%;
+        }
+        .w72 {
+            width: 72px;
+        }
+        .tooltipf {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltipf .tooltiptext {
+            visibility: hidden;
+            width: 140px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 150%;
+            left: 50%;
+            margin-left: -75px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltipf .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+        .tooltipf:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        body.dark-theme {
+            background: #2f3136;
+            color: #d7dadc;
+        }
+        body.dark-theme .list-group-item {
+            background: #36393f;
+        }
+        body.dark-theme .btn-light {
+            background: #393c43;
+            border-color: #444951;
+            color: #d7dadc;
+        }
+        body.dark-theme .form-control {
+            border: 1px solid #444951;
+            background: transparent;
+            color: #d7dadc;
+        }
+        body.dark-theme .hero-icon {
+            border: 2px solid #444951;
+        }
+        body.dark-theme .input-group-text {
+            background: #363a40;
+            color: #ccc;
+            border: 1px solid #444951;
+        }
+        body.dark-theme .btn-outline-secondary {
+            color: #f5f5f5;
+            background-color: #393c43;
+            /*border-color: #393c43;*/
+        }
+        body.dark-theme .btn-outline-secondary:hover {
+            color: #fff;
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        body.dark-theme .dropdown-menu {
+            color: #fff;
+            background: #40444b;
+        }
+        body.dark-theme .dropdown-item {
+            color: #f5f5f5;
+        }
+        body.dark-theme .dropdown-item:focus,
+        .dropdown-item:hover {
+            color: #f5f5f5;
+            background-color: #6c757d;
+        }
+        .credits{
+            text-align : right;
+            font-size: 10px;
+            font-style: italic;
+        }
+    </style>
+
+    <title>Guild war info tool</title>
+</head>
+
+<body class="dark-theme">
+    <div class="container" style="margin-top:50px;">
+        <h1 class="text-center">Outil de rapport GvG</h1>
+        <hr />
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div style="display: flex;flex-wrap:wrap;align-items:flex-start">
+                    <div style="width:280px;margin-right:15px;" class="mb-2">
+                        <select id="your_unit" class="selectpicker" title="Héros de référence (100% speed)" data-live-search="true">
+
+                        </select>
+                    </div>
+                    <div class="input-group mb-2" style="width:150px">
+                        <input id="you_speed_1" name="you_speed_1" type="number" min="0" class="form-control" />
+                        <div class="input-group-append">
+                            <span class="input-group-text">Speed</span>
+                        </div>
+                    </div>
+                    <div style="flex:1"></div>
+                    <div class="btn-group mb-2" role="group" style="height: 38px;">
+                        <a href="./" class="btn btn-outline-secondary">Mise à jour</a>
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle"
+                            data-toggle="dropdown">Theme</button>
+                        <div class="dropdown-menu">
+                            <a id="dark_theme_btn" class="dropdown-item" href="#">Dark</a>
+                            <a id="light_theme_btn" class="dropdown-item" href="#">Light</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-group">
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-sm-4" style="margin-bottom:10px">
+                        <select id="enemy_unit_1" title="Choisissez un héros" class="selectpicker"
+                            data-target="r_enemy_unit_1" data-live-search="true">     
+                            </select>                      
+                    </div>
+                    <div class="col-sm-4" style="margin-bottom:10px">
+                        <select id="enemy_arti_1" title="Choisissez un artéfact" data-target="r_enemy_arti_1"
+                            class="selectpicker" data-live-search="true">
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/abyssal-crown/icon.png' /><span>Abyssal Crown</span>">
+                                Abyssal Crown</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/adamant-shield/icon.png' /><span>Adamant Shield</span>">
+                                Adamant Shield</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/alexas-basket/icon.png' /><span>Alexas Basket</span>">
+                                Alexas Basket</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/alsacian-spear/icon.png' /><span>Alsacian Spear</span>">
+                                Alsacian Spear</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/ambrote/icon.png' /><span>Ambrote</span>">
+                                Ambrote</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/ancient-sheath/icon.png' /><span>Ancient Sheath</span>">
+                                Ancient Sheath</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/aqua-rose/icon.png' /><span>Aqua Rose</span>">
+                                Aqua Rose</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/ascending-axe/icon.png' /><span>Ascending Axe</span>">
+                                Ascending Axe</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/atmas-portal/icon.png' /><span>Atmas Portal</span>">
+                                Atmas Portal</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/aurius/icon.png' /><span>Aurius</span>">
+                                Aurius</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/bastion-of-perlutia/icon.png' /><span>Bastion Of Perlutia</span>">
+                                Bastion Of Perlutia</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/biting-wind-star/icon.png' /><span>Biting Wind Star</span>">
+                                Biting Wind Star</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/bloodbead-dagger/icon.png' /><span>Bloodbead Dagger</span>">
+                                Bloodbead Dagger</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/bloodstone/icon.png' /><span>Bloodstone</span>">
+                                Bloodstone</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/border-coin/icon.png' /><span>Border Coin</span>">
+                                Border Coin</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/bottle-of-knowledge/icon.png' /><span>Bottle Of Knowledge</span>">
+                                Bottle Of Knowledge</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/butterfly-mandolin/icon.png' /><span>Butterfly Mandolin</span>">
+                                Butterfly Mandolin</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/card-of-small-miracles/icon.png' /><span>Card Of Small Miracles</span>">
+                                Card Of Small Miracles</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/celestine/icon.png' /><span>Celestine</span>">
+                                Celestine</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/chatty/icon.png' /><span>Chatty</span>">
+                                Chatty</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/creation-destruction/icon.png' /><span>Creation Destruction</span>">
+                                Creation Destruction</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/crimson-seed/icon.png' /><span>Crimson Seed</span>">
+                                Crimson Seed</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/cursed-compass/icon.png' /><span>Cursed Compass</span>">
+                                Cursed Compass</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/daydream-joker/icon.png' /><span>Daydream Joker</span>">
+                                Daydream Joker</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/deadly-sword/icon.png' /><span>Deadly Sword</span>">
+                                Deadly Sword</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/demons-pistol/icon.png' /><span>Demons Pistol</span>">
+                                Demons Pistol</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/devils-brand/icon.png' /><span>Devils Brand</span>">
+                                Devils Brand</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/dignus-orb/icon.png' /><span>Dignus Orb</span>">
+                                Dignus Orb</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/dream-scroll/icon.png' /><span>Dream Scroll</span>">
+                                Dream Scroll</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/durandal/icon.png' /><span>Durandal</span>">
+                                Durandal</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/dust-devil/icon.png' /><span>Dust Devil</span>">
+                                Dust Devil</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/egg-of-delusion/icon.png' /><span>Egg Of Delusion</span>">
+                                Egg Of Delusion</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/elbris-ritual-sword/icon.png' /><span>Elbris Ritual Sword</span>">
+                                Elbris Ritual Sword</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/elfs-bow/icon.png' /><span>Elfs Bow</span>">
+                                Elfs Bow</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/els-fist/icon.png' /><span>Els Fist</span>">
+                                Els Fist</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/elyhas-knife/icon.png' /><span>Elyhas Knife</span>">
+                                Elyhas Knife</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/enhanced-gauntlet/icon.png' /><span>Enhanced Gauntlet</span>">
+                                Enhanced Gauntlet</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/envoys-pipe/icon.png' /><span>Envoys Pipe</span>">
+                                Envoys Pipe</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/eticas-scepter/icon.png' /><span>Eticas Scepter</span>">
+                                Eticas Scepter</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/exorcists-tonfa/icon.png' /><span>Exorcists Tonfa</span>">
+                                Exorcists Tonfa</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/fairys-grimoire/icon.png' /><span>Fairys Grimoire</span>">
+                                Fairys Grimoire</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/firm-shield/icon.png' /><span>Firm Shield</span>">
+                                Firm Shield</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/forest-totem/icon.png' /><span>Forest Totem</span>">
+                                Forest Totem</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/goblins-lamp/icon.png' /><span>Goblins Lamp</span>">
+                                Goblins Lamp</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/grail-of-blood/icon.png' /><span>Grail Of Blood</span>">
+                                Grail Of Blood</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/hell-cutter/icon.png' /><span>Hell Cutter</span>">
+                                Hell Cutter</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/hilag-lance/icon.png' /><span>Hilag Lance</span>">
+                                Hilag Lance</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/holy-sacrifice/icon.png' /><span>Holy Sacrifice</span>">
+                                Holy Sacrifice</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/idols-cheer/icon.png' /><span>Idols Cheer</span>">
+                                Idols Cheer</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/iela-violin/icon.png' /><span>Iela Violin</span>">
+                                Iela Violin</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/infinity-basket/icon.png' /><span>Infinity Basket</span>">
+                                Infinity Basket</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/iron-fan/icon.png' /><span>Iron Fan</span>">
+                                Iron Fan</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/junkyard-dog/icon.png' /><span>Junkyard Dog</span>">
+                                Junkyard Dog</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/justice-for-all/icon.png' /><span>Justice For All</span>">
+                                Justice For All</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/kaladra/icon.png' /><span>Kaladra</span>">
+                                Kaladra</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/labyrinth-cube/icon.png' /><span>Labyrinth Cube</span>">
+                                Labyrinth Cube</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/love-potion/icon.png' /><span>Love Potion</span>">
+                                Love Potion</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/magarahas-tome/icon.png' /><span>Magarahas Tome</span>">
+                                Magarahas Tome</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/midnight-bloom/icon.png' /><span>Midnight Bloom</span>">
+                                Midnight Bloom</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/mighty-yaksha/icon.png' /><span>Mighty Yaksha</span>">
+                                Mighty Yaksha</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/moonlight-dreamblade/icon.png' /><span>Moonlight Dreamblade</span>">
+                                Moonlight Dreamblade</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/necro-undine/icon.png' /><span>Necro Undine</span>">
+                                Necro Undine</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/noble-oath/icon.png' /><span>Noble Oath</span>">
+                                Noble Oath</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/oath-key/icon.png' /><span>Oath Key</span>">
+                                Oath Key</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/one-year-of-gratitude/icon.png' /><span>One Year Of Gratitude</span>">
+                                One Year Of Gratitude</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/otherworldly-machinery/icon.png' /><span>Otherworldly Machinery</span>">
+                                Otherworldly Machinery</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/portrait-of-the-saviors/icon.png' /><span>Portrait Of The Saviors</span>">
+                                Portrait Of The Saviors</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/proof-of-valor/icon.png' /><span>Proof Of Valor</span>">
+                                Proof Of Valor</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/prophetic-candlestick/icon.png' /><span>Prophetic Candlestick</span>">
+                                Prophetic Candlestick</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/radiant-forever/icon.png' /><span>Radiant Forever</span>">
+                                Radiant Forever</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/rainbow-scale/icon.png' /><span>Rainbow Scale</span>">
+                                Rainbow Scale</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/ranons-memorandum/icon.png' /><span>Ranons Memorandum</span>">
+                                Ranons Memorandum</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/reingars-special-drink/icon.png' /><span>Reingars Special Drink</span>">
+                                Reingars Special Drink</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/rhianna-luciella/icon.png' /><span>Rhianna Luciella</span>">
+                                Rhianna Luciella</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/rod-of-amaryllis/icon.png' /><span>Rod Of Amaryllis</span>">
+                                Rod Of Amaryllis</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/rosa-hargana/icon.png' /><span>Rosa Hargana</span>">
+                                Rosa Hargana</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/santa-muerte/icon.png' /><span>Santa Muerte</span>">
+                                Santa Muerte</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sashe-ithanes/icon.png' /><span>Sashe Ithanes</span>">
+                                Sashe Ithanes</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/shepherds-of-chaos/icon.png' /><span>Shepherds Of Chaos</span>">
+                                Shepherds Of Chaos</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/shimadra-staff/icon.png' /><span>Shimadra Staff</span>">
+                                Shimadra Staff</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sigurd-scythe/icon.png' /><span>Sigurd Scythe</span>">
+                                Sigurd Scythe</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sira-ren/icon.png' /><span>Sira Ren</span>">
+                                Sira Ren</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/song-of-stars/icon.png' /><span>Song Of Stars</span>">
+                                Song Of Stars</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/spirits-breath/icon.png' /><span>Spirits Breath</span>">
+                                Spirits Breath</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/staff-of-wisdom/icon.png' /><span>Staff Of Wisdom</span>">
+                                Staff Of Wisdom</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/strak-gauntlet/icon.png' /><span>Strak Gauntlet</span>">
+                                Strak Gauntlet</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sword-of-ezera/icon.png' /><span>Sword Of Ezera</span>">
+                                Sword Of Ezera</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sword-of-judgment/icon.png' /><span>Sword Of Judgment</span>">
+                                Sword Of Judgment</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sword-of-the-morning/icon.png' /><span>Sword Of The Morning</span>">
+                                Sword Of The Morning</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sword-of-the-sun/icon.png' /><span>Sword Of The Sun</span>">
+                                Sword Of The Sun</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/tagehels-ancient-book/icon.png' /><span>Tagehels Ancient Book</span>">
+                                Tagehels Ancient Book</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/tear-of-the-desert/icon.png' /><span>Tear Of The Desert</span>">
+                                Tear Of The Desert</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/timeless-anchor/icon.png' /><span>Timeless Anchor</span>">
+                                Timeless Anchor</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/time-matter/icon.png' /><span>Time Matter</span>">
+                                Time Matter</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/torn-sleeve/icon.png' /><span>Torn Sleeve</span>">
+                                Torn Sleeve</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/uberiuss-tooth/icon.png' /><span>Uberiuss Tooth</span>">
+                                Uberiuss Tooth</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/venus-orb/icon.png' /><span>Venus Orb</span>">
+                                Venus Orb</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/violet-talisman/icon.png' /><span>Violet Talisman</span>">
+                                Violet Talisman</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/waters-origin/icon.png' /><span>Waters Origin</span>">
+                                Waters Origin</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/wind-rider/icon.png' /><span>Wind Rider</span>">
+                                Wind Rider</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/wondrous-potion-vial/icon.png' /><span>Wondrous Potion Vial</span>">
+                                Wondrous Potion Vial</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2 col-6" style="margin-bottom:10px">
+                        <div class="input-group">
+                            <input id="enemy_hp_1" data-target="r_enemy_hp_1" type="text"
+                                class="form-control enemy_hp" />
+                            <div class="input-group-append">
+                                <span class="input-group-text">HP</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-6" style="margin-bottom:10px">
+                        <div class="input-group">
+                            <input id="enemy_cr_1" type="number" min="0" max="100" class="form-control" />
+                            <div class="input-group-append">
+                                <span class="input-group-text w72">% CR</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-10 col-6">
+                        <input id="enemy_info_1" type="text" class="form-control enemy_info"
+                            placeholder="Informations supplémentaires..." />
+                    </div>
+                    <div class="col-sm-2 col-6">
+                        <div class="input-group">
+                            <span id="enemy_speed_1" class="form-control">—</span>
+                            <div class="input-group-append">
+                                <span class="input-group-text w72">Vitesse</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-sm-4" style="margin-bottom:10px">
+                        <select id="enemy_unit_2" title="Choisissez un héros" class="selectpicker"
+                            data-target="r_enemy_unit_2" data-live-search="true">                        
+                        </select>
+                    </div>
+                    <div class="col-sm-4" style="margin-bottom:10px">
+                        <select id="enemy_arti_2" title="Choisissez un artéfact" data-target="r_enemy_arti_2"
+                            class="selectpicker" data-live-search="true">
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/abyssal-crown/icon.png' /><span>Abyssal Crown</span>">
+                                Abyssal Crown</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/adamant-shield/icon.png' /><span>Adamant Shield</span>">
+                                Adamant Shield</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/alexas-basket/icon.png' /><span>Alexas Basket</span>">
+                                Alexas Basket</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/alsacian-spear/icon.png' /><span>Alsacian Spear</span>">
+                                Alsacian Spear</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/ambrote/icon.png' /><span>Ambrote</span>">
+                                Ambrote</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/ancient-sheath/icon.png' /><span>Ancient Sheath</span>">
+                                Ancient Sheath</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/aqua-rose/icon.png' /><span>Aqua Rose</span>">
+                                Aqua Rose</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/ascending-axe/icon.png' /><span>Ascending Axe</span>">
+                                Ascending Axe</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/atmas-portal/icon.png' /><span>Atmas Portal</span>">
+                                Atmas Portal</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/aurius/icon.png' /><span>Aurius</span>">
+                                Aurius</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/bastion-of-perlutia/icon.png' /><span>Bastion Of Perlutia</span>">
+                                Bastion Of Perlutia</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/biting-wind-star/icon.png' /><span>Biting Wind Star</span>">
+                                Biting Wind Star</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/bloodbead-dagger/icon.png' /><span>Bloodbead Dagger</span>">
+                                Bloodbead Dagger</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/bloodstone/icon.png' /><span>Bloodstone</span>">
+                                Bloodstone</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/border-coin/icon.png' /><span>Border Coin</span>">
+                                Border Coin</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/bottle-of-knowledge/icon.png' /><span>Bottle Of Knowledge</span>">
+                                Bottle Of Knowledge</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/butterfly-mandolin/icon.png' /><span>Butterfly Mandolin</span>">
+                                Butterfly Mandolin</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/card-of-small-miracles/icon.png' /><span>Card Of Small Miracles</span>">
+                                Card Of Small Miracles</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/celestine/icon.png' /><span>Celestine</span>">
+                                Celestine</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/chatty/icon.png' /><span>Chatty</span>">
+                                Chatty</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/creation-destruction/icon.png' /><span>Creation Destruction</span>">
+                                Creation Destruction</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/crimson-seed/icon.png' /><span>Crimson Seed</span>">
+                                Crimson Seed</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/cursed-compass/icon.png' /><span>Cursed Compass</span>">
+                                Cursed Compass</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/daydream-joker/icon.png' /><span>Daydream Joker</span>">
+                                Daydream Joker</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/deadly-sword/icon.png' /><span>Deadly Sword</span>">
+                                Deadly Sword</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/demons-pistol/icon.png' /><span>Demons Pistol</span>">
+                                Demons Pistol</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/devils-brand/icon.png' /><span>Devils Brand</span>">
+                                Devils Brand</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/dignus-orb/icon.png' /><span>Dignus Orb</span>">
+                                Dignus Orb</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/dream-scroll/icon.png' /><span>Dream Scroll</span>">
+                                Dream Scroll</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/durandal/icon.png' /><span>Durandal</span>">
+                                Durandal</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/dust-devil/icon.png' /><span>Dust Devil</span>">
+                                Dust Devil</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/egg-of-delusion/icon.png' /><span>Egg Of Delusion</span>">
+                                Egg Of Delusion</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/elbris-ritual-sword/icon.png' /><span>Elbris Ritual Sword</span>">
+                                Elbris Ritual Sword</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/elfs-bow/icon.png' /><span>Elfs Bow</span>">
+                                Elfs Bow</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/els-fist/icon.png' /><span>Els Fist</span>">
+                                Els Fist</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/elyhas-knife/icon.png' /><span>Elyhas Knife</span>">
+                                Elyhas Knife</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/enhanced-gauntlet/icon.png' /><span>Enhanced Gauntlet</span>">
+                                Enhanced Gauntlet</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/envoys-pipe/icon.png' /><span>Envoys Pipe</span>">
+                                Envoys Pipe</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/eticas-scepter/icon.png' /><span>Eticas Scepter</span>">
+                                Eticas Scepter</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/exorcists-tonfa/icon.png' /><span>Exorcists Tonfa</span>">
+                                Exorcists Tonfa</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/fairys-grimoire/icon.png' /><span>Fairys Grimoire</span>">
+                                Fairys Grimoire</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/firm-shield/icon.png' /><span>Firm Shield</span>">
+                                Firm Shield</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/forest-totem/icon.png' /><span>Forest Totem</span>">
+                                Forest Totem</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/goblins-lamp/icon.png' /><span>Goblins Lamp</span>">
+                                Goblins Lamp</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/grail-of-blood/icon.png' /><span>Grail Of Blood</span>">
+                                Grail Of Blood</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/hell-cutter/icon.png' /><span>Hell Cutter</span>">
+                                Hell Cutter</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/hilag-lance/icon.png' /><span>Hilag Lance</span>">
+                                Hilag Lance</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/holy-sacrifice/icon.png' /><span>Holy Sacrifice</span>">
+                                Holy Sacrifice</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/idols-cheer/icon.png' /><span>Idols Cheer</span>">
+                                Idols Cheer</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/iela-violin/icon.png' /><span>Iela Violin</span>">
+                                Iela Violin</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/infinity-basket/icon.png' /><span>Infinity Basket</span>">
+                                Infinity Basket</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/iron-fan/icon.png' /><span>Iron Fan</span>">
+                                Iron Fan</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/junkyard-dog/icon.png' /><span>Junkyard Dog</span>">
+                                Junkyard Dog</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/justice-for-all/icon.png' /><span>Justice For All</span>">
+                                Justice For All</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/kaladra/icon.png' /><span>Kaladra</span>">
+                                Kaladra</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/labyrinth-cube/icon.png' /><span>Labyrinth Cube</span>">
+                                Labyrinth Cube</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/love-potion/icon.png' /><span>Love Potion</span>">
+                                Love Potion</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/magarahas-tome/icon.png' /><span>Magarahas Tome</span>">
+                                Magarahas Tome</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/midnight-bloom/icon.png' /><span>Midnight Bloom</span>">
+                                Midnight Bloom</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/mighty-yaksha/icon.png' /><span>Mighty Yaksha</span>">
+                                Mighty Yaksha</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/moonlight-dreamblade/icon.png' /><span>Moonlight Dreamblade</span>">
+                                Moonlight Dreamblade</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/necro-undine/icon.png' /><span>Necro Undine</span>">
+                                Necro Undine</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/noble-oath/icon.png' /><span>Noble Oath</span>">
+                                Noble Oath</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/oath-key/icon.png' /><span>Oath Key</span>">
+                                Oath Key</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/one-year-of-gratitude/icon.png' /><span>One Year Of Gratitude</span>">
+                                One Year Of Gratitude</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/otherworldly-machinery/icon.png' /><span>Otherworldly Machinery</span>">
+                                Otherworldly Machinery</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/portrait-of-the-saviors/icon.png' /><span>Portrait Of The Saviors</span>">
+                                Portrait Of The Saviors</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/proof-of-valor/icon.png' /><span>Proof Of Valor</span>">
+                                Proof Of Valor</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/prophetic-candlestick/icon.png' /><span>Prophetic Candlestick</span>">
+                                Prophetic Candlestick</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/radiant-forever/icon.png' /><span>Radiant Forever</span>">
+                                Radiant Forever</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/rainbow-scale/icon.png' /><span>Rainbow Scale</span>">
+                                Rainbow Scale</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/ranons-memorandum/icon.png' /><span>Ranons Memorandum</span>">
+                                Ranons Memorandum</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/reingars-special-drink/icon.png' /><span>Reingars Special Drink</span>">
+                                Reingars Special Drink</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/rhianna-luciella/icon.png' /><span>Rhianna Luciella</span>">
+                                Rhianna Luciella</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/rod-of-amaryllis/icon.png' /><span>Rod Of Amaryllis</span>">
+                                Rod Of Amaryllis</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/rosa-hargana/icon.png' /><span>Rosa Hargana</span>">
+                                Rosa Hargana</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/santa-muerte/icon.png' /><span>Santa Muerte</span>">
+                                Santa Muerte</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sashe-ithanes/icon.png' /><span>Sashe Ithanes</span>">
+                                Sashe Ithanes</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/shepherds-of-chaos/icon.png' /><span>Shepherds Of Chaos</span>">
+                                Shepherds Of Chaos</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/shimadra-staff/icon.png' /><span>Shimadra Staff</span>">
+                                Shimadra Staff</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sigurd-scythe/icon.png' /><span>Sigurd Scythe</span>">
+                                Sigurd Scythe</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sira-ren/icon.png' /><span>Sira Ren</span>">
+                                Sira Ren</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/song-of-stars/icon.png' /><span>Song Of Stars</span>">
+                                Song Of Stars</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/spirits-breath/icon.png' /><span>Spirits Breath</span>">
+                                Spirits Breath</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/staff-of-wisdom/icon.png' /><span>Staff Of Wisdom</span>">
+                                Staff Of Wisdom</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/strak-gauntlet/icon.png' /><span>Strak Gauntlet</span>">
+                                Strak Gauntlet</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sword-of-ezera/icon.png' /><span>Sword Of Ezera</span>">
+                                Sword Of Ezera</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sword-of-judgment/icon.png' /><span>Sword Of Judgment</span>">
+                                Sword Of Judgment</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sword-of-the-morning/icon.png' /><span>Sword Of The Morning</span>">
+                                Sword Of The Morning</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sword-of-the-sun/icon.png' /><span>Sword Of The Sun</span>">
+                                Sword Of The Sun</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/tagehels-ancient-book/icon.png' /><span>Tagehels Ancient Book</span>">
+                                Tagehels Ancient Book</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/tear-of-the-desert/icon.png' /><span>Tear Of The Desert</span>">
+                                Tear Of The Desert</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/timeless-anchor/icon.png' /><span>Timeless Anchor</span>">
+                                Timeless Anchor</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/time-matter/icon.png' /><span>Time Matter</span>">
+                                Time Matter</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/torn-sleeve/icon.png' /><span>Torn Sleeve</span>">
+                                Torn Sleeve</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/uberiuss-tooth/icon.png' /><span>Uberiuss Tooth</span>">
+                                Uberiuss Tooth</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/venus-orb/icon.png' /><span>Venus Orb</span>">
+                                Venus Orb</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/violet-talisman/icon.png' /><span>Violet Talisman</span>">
+                                Violet Talisman</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/waters-origin/icon.png' /><span>Waters Origin</span>">
+                                Waters Origin</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/wind-rider/icon.png' /><span>Wind Rider</span>">
+                                Wind Rider</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/wondrous-potion-vial/icon.png' /><span>Wondrous Potion Vial</span>">
+                                Wondrous Potion Vial</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2 col-6" style="margin-bottom:10px">
+                        <div class="input-group">
+                            <input id="enemy_hp_2" data-target="r_enemy_hp_2" type="text"
+                                class="form-control enemy_hp" />
+                            <div class="input-group-append">
+                                <span class="input-group-text">HP</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-6" style="margin-bottom:10px">
+                        <div class="input-group">
+                            <input id="enemy_cr_2" type="number" min="0" max="100" class="form-control" />
+                            <div class="input-group-append">
+                                <span class="input-group-text w72">% CR</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-10 col-6">
+                        <input id="enemy_info_2" type="text" class="form-control enemy_info"
+                            placeholder="Informations supplémentaires..." />
+                    </div>
+                    <div class="col-sm-2 col-6">
+                        <div class="input-group">
+                            <span id="enemy_speed_2" class="form-control">—</span>
+                            <div class="input-group-append">
+                                <span class="input-group-text w72">Vitesse</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-sm-4" style="margin-bottom:10px">
+                        <select id="enemy_unit_3" title="Choisissez un héros" class="selectpicker"
+                            data-target="r_enemy_unit_3" data-live-search="true">
+
+                        </select>
+                    </div>
+                    <div class="col-sm-4" style="margin-bottom:10px">
+                        <select id="enemy_arti_3" title="Choisissez un artéfact" data-target="r_enemy_arti_3"
+                            class="selectpicker" data-live-search="true">
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/abyssal-crown/icon.png' /><span>Abyssal Crown</span>">
+                                Abyssal Crown</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/adamant-shield/icon.png' /><span>Adamant Shield</span>">
+                                Adamant Shield</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/alexas-basket/icon.png' /><span>Alexas Basket</span>">
+                                Alexas Basket</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/alsacian-spear/icon.png' /><span>Alsacian Spear</span>">
+                                Alsacian Spear</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/ambrote/icon.png' /><span>Ambrote</span>">
+                                Ambrote</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/ancient-sheath/icon.png' /><span>Ancient Sheath</span>">
+                                Ancient Sheath</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/aqua-rose/icon.png' /><span>Aqua Rose</span>">
+                                Aqua Rose</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/ascending-axe/icon.png' /><span>Ascending Axe</span>">
+                                Ascending Axe</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/atmas-portal/icon.png' /><span>Atmas Portal</span>">
+                                Atmas Portal</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/aurius/icon.png' /><span>Aurius</span>">
+                                Aurius</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/bastion-of-perlutia/icon.png' /><span>Bastion Of Perlutia</span>">
+                                Bastion Of Perlutia</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/biting-wind-star/icon.png' /><span>Biting Wind Star</span>">
+                                Biting Wind Star</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/bloodbead-dagger/icon.png' /><span>Bloodbead Dagger</span>">
+                                Bloodbead Dagger</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/bloodstone/icon.png' /><span>Bloodstone</span>">
+                                Bloodstone</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/border-coin/icon.png' /><span>Border Coin</span>">
+                                Border Coin</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/bottle-of-knowledge/icon.png' /><span>Bottle Of Knowledge</span>">
+                                Bottle Of Knowledge</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/butterfly-mandolin/icon.png' /><span>Butterfly Mandolin</span>">
+                                Butterfly Mandolin</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/card-of-small-miracles/icon.png' /><span>Card Of Small Miracles</span>">
+                                Card Of Small Miracles</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/celestine/icon.png' /><span>Celestine</span>">
+                                Celestine</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/chatty/icon.png' /><span>Chatty</span>">
+                                Chatty</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/creation-destruction/icon.png' /><span>Creation Destruction</span>">
+                                Creation Destruction</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/crimson-seed/icon.png' /><span>Crimson Seed</span>">
+                                Crimson Seed</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/cursed-compass/icon.png' /><span>Cursed Compass</span>">
+                                Cursed Compass</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/daydream-joker/icon.png' /><span>Daydream Joker</span>">
+                                Daydream Joker</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/deadly-sword/icon.png' /><span>Deadly Sword</span>">
+                                Deadly Sword</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/demons-pistol/icon.png' /><span>Demons Pistol</span>">
+                                Demons Pistol</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/devils-brand/icon.png' /><span>Devils Brand</span>">
+                                Devils Brand</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/dignus-orb/icon.png' /><span>Dignus Orb</span>">
+                                Dignus Orb</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/dream-scroll/icon.png' /><span>Dream Scroll</span>">
+                                Dream Scroll</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/durandal/icon.png' /><span>Durandal</span>">
+                                Durandal</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/dust-devil/icon.png' /><span>Dust Devil</span>">
+                                Dust Devil</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/egg-of-delusion/icon.png' /><span>Egg Of Delusion</span>">
+                                Egg Of Delusion</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/elbris-ritual-sword/icon.png' /><span>Elbris Ritual Sword</span>">
+                                Elbris Ritual Sword</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/elfs-bow/icon.png' /><span>Elfs Bow</span>">
+                                Elfs Bow</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/els-fist/icon.png' /><span>Els Fist</span>">
+                                Els Fist</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/elyhas-knife/icon.png' /><span>Elyhas Knife</span>">
+                                Elyhas Knife</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/enhanced-gauntlet/icon.png' /><span>Enhanced Gauntlet</span>">
+                                Enhanced Gauntlet</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/envoys-pipe/icon.png' /><span>Envoys Pipe</span>">
+                                Envoys Pipe</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/eticas-scepter/icon.png' /><span>Eticas Scepter</span>">
+                                Eticas Scepter</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/exorcists-tonfa/icon.png' /><span>Exorcists Tonfa</span>">
+                                Exorcists Tonfa</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/fairys-grimoire/icon.png' /><span>Fairys Grimoire</span>">
+                                Fairys Grimoire</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/firm-shield/icon.png' /><span>Firm Shield</span>">
+                                Firm Shield</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/forest-totem/icon.png' /><span>Forest Totem</span>">
+                                Forest Totem</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/goblins-lamp/icon.png' /><span>Goblins Lamp</span>">
+                                Goblins Lamp</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/grail-of-blood/icon.png' /><span>Grail Of Blood</span>">
+                                Grail Of Blood</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/hell-cutter/icon.png' /><span>Hell Cutter</span>">
+                                Hell Cutter</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/hilag-lance/icon.png' /><span>Hilag Lance</span>">
+                                Hilag Lance</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/holy-sacrifice/icon.png' /><span>Holy Sacrifice</span>">
+                                Holy Sacrifice</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/idols-cheer/icon.png' /><span>Idols Cheer</span>">
+                                Idols Cheer</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/iela-violin/icon.png' /><span>Iela Violin</span>">
+                                Iela Violin</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/infinity-basket/icon.png' /><span>Infinity Basket</span>">
+                                Infinity Basket</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/iron-fan/icon.png' /><span>Iron Fan</span>">
+                                Iron Fan</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/junkyard-dog/icon.png' /><span>Junkyard Dog</span>">
+                                Junkyard Dog</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/justice-for-all/icon.png' /><span>Justice For All</span>">
+                                Justice For All</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/kaladra/icon.png' /><span>Kaladra</span>">
+                                Kaladra</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/labyrinth-cube/icon.png' /><span>Labyrinth Cube</span>">
+                                Labyrinth Cube</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/love-potion/icon.png' /><span>Love Potion</span>">
+                                Love Potion</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/magarahas-tome/icon.png' /><span>Magarahas Tome</span>">
+                                Magarahas Tome</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/midnight-bloom/icon.png' /><span>Midnight Bloom</span>">
+                                Midnight Bloom</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/mighty-yaksha/icon.png' /><span>Mighty Yaksha</span>">
+                                Mighty Yaksha</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/moonlight-dreamblade/icon.png' /><span>Moonlight Dreamblade</span>">
+                                Moonlight Dreamblade</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/necro-undine/icon.png' /><span>Necro Undine</span>">
+                                Necro Undine</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/noble-oath/icon.png' /><span>Noble Oath</span>">
+                                Noble Oath</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/oath-key/icon.png' /><span>Oath Key</span>">
+                                Oath Key</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/one-year-of-gratitude/icon.png' /><span>One Year Of Gratitude</span>">
+                                One Year Of Gratitude</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/otherworldly-machinery/icon.png' /><span>Otherworldly Machinery</span>">
+                                Otherworldly Machinery</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/portrait-of-the-saviors/icon.png' /><span>Portrait Of The Saviors</span>">
+                                Portrait Of The Saviors</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/proof-of-valor/icon.png' /><span>Proof Of Valor</span>">
+                                Proof Of Valor</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/prophetic-candlestick/icon.png' /><span>Prophetic Candlestick</span>">
+                                Prophetic Candlestick</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/radiant-forever/icon.png' /><span>Radiant Forever</span>">
+                                Radiant Forever</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/rainbow-scale/icon.png' /><span>Rainbow Scale</span>">
+                                Rainbow Scale</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/ranons-memorandum/icon.png' /><span>Ranons Memorandum</span>">
+                                Ranons Memorandum</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/reingars-special-drink/icon.png' /><span>Reingars Special Drink</span>">
+                                Reingars Special Drink</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/rhianna-luciella/icon.png' /><span>Rhianna Luciella</span>">
+                                Rhianna Luciella</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/rod-of-amaryllis/icon.png' /><span>Rod Of Amaryllis</span>">
+                                Rod Of Amaryllis</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/rosa-hargana/icon.png' /><span>Rosa Hargana</span>">
+                                Rosa Hargana</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/santa-muerte/icon.png' /><span>Santa Muerte</span>">
+                                Santa Muerte</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sashe-ithanes/icon.png' /><span>Sashe Ithanes</span>">
+                                Sashe Ithanes</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/shepherds-of-chaos/icon.png' /><span>Shepherds Of Chaos</span>">
+                                Shepherds Of Chaos</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/shimadra-staff/icon.png' /><span>Shimadra Staff</span>">
+                                Shimadra Staff</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sigurd-scythe/icon.png' /><span>Sigurd Scythe</span>">
+                                Sigurd Scythe</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sira-ren/icon.png' /><span>Sira Ren</span>">
+                                Sira Ren</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/song-of-stars/icon.png' /><span>Song Of Stars</span>">
+                                Song Of Stars</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/spirits-breath/icon.png' /><span>Spirits Breath</span>">
+                                Spirits Breath</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/staff-of-wisdom/icon.png' /><span>Staff Of Wisdom</span>">
+                                Staff Of Wisdom</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/strak-gauntlet/icon.png' /><span>Strak Gauntlet</span>">
+                                Strak Gauntlet</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sword-of-ezera/icon.png' /><span>Sword Of Ezera</span>">
+                                Sword Of Ezera</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sword-of-judgment/icon.png' /><span>Sword Of Judgment</span>">
+                                Sword Of Judgment</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sword-of-the-morning/icon.png' /><span>Sword Of The Morning</span>">
+                                Sword Of The Morning</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/sword-of-the-sun/icon.png' /><span>Sword Of The Sun</span>">
+                                Sword Of The Sun</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/tagehels-ancient-book/icon.png' /><span>Tagehels Ancient Book</span>">
+                                Tagehels Ancient Book</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/tear-of-the-desert/icon.png' /><span>Tear Of The Desert</span>">
+                                Tear Of The Desert</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/timeless-anchor/icon.png' /><span>Timeless Anchor</span>">
+                                Timeless Anchor</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/time-matter/icon.png' /><span>Time Matter</span>">
+                                Time Matter</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/torn-sleeve/icon.png' /><span>Torn Sleeve</span>">
+                                Torn Sleeve</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/uberiuss-tooth/icon.png' /><span>Uberiuss Tooth</span>">
+                                Uberiuss Tooth</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/venus-orb/icon.png' /><span>Venus Orb</span>">
+                                Venus Orb</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/violet-talisman/icon.png' /><span>Violet Talisman</span>">
+                                Violet Talisman</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/waters-origin/icon.png' /><span>Waters Origin</span>">
+                                Waters Origin</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/wind-rider/icon.png' /><span>Wind Rider</span>">
+                                Wind Rider</option>
+                            <option
+                                data-content="<img class='arti-icon' src='https://assets.epicsevendb.com/artifact/wondrous-potion-vial/icon.png' /><span>Wondrous Potion Vial</span>">
+                                Wondrous Potion Vial</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2 col-6" style="margin-bottom:10px">
+                        <div class="input-group">
+                            <input id="enemy_hp_3" data-target="r_enemy_hp_3" type="text"
+                                class="form-control enemy_hp" />
+                            <div class="input-group-append">
+                                <span class="input-group-text">HP</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-6" style="margin-bottom:10px">
+                        <div class="input-group">
+                            <input id="enemy_cr_3" type="number" min="0" max="100" class="form-control" />
+                            <div class="input-group-append">
+                                <span class="input-group-text w72">% CR</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-10 col-6">
+                        <input id="enemy_info_3" type="text" class="form-control enemy_info"
+                            placeholder="Informations supplémentaires..." />
+                    </div>
+                    <div class="col-sm-2 col-6">
+                        <div class="input-group">
+                            <span id="enemy_speed_3" class="form-control">—</span>
+                            <div class="input-group-append">
+                                <span class="input-group-text w72">Vitesse</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div>
+            <div style="display: flex;justify-content: space-between;">
+                <h2>Rapport</h2>
+                <div class="tooltipf">
+                    <button class="btn btn-outline-secondary" onclick="myFunction()" onmouseout="outFunc()"><span
+                            class="tooltiptext" id="myTooltip">Copié dans le presse-papier</span>Copier le texte</button>
+                </div>
+            </div>
+            <textarea id="result_text" class="form-control" style="min-height:120px;"></textarea>
+        </div>
+        <div class="credits">
+        Outil original de Mzeus (https://mzeus.github.io)
+        </div>
+        <br>
+        <hr>
+        <br>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+    <script>
+        var heroList = [
+            { imageUrl: "https://assets.epicsevendb.com/hero/achates/icon.png", Name: "Achates"},
+            { imageUrl: "https://assets.epicsevendb.com/hero/adlay/icon.png", Name: "Adlay"},            
+            { imageUrl: "https://assets.epicsevendb.com/hero/aither/icon.png", Name: "Aither", },
+            { imageUrl: "https://assets.epicsevendb.com/hero/alexa/icon.png", Name: "Alexa" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/angelica/icon.png", Name: "Angelica" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/angelic-montmorancy/icon.png", Name: "Angelic Montmorancy" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/apocalypse-ravi/icon.png", Name: "Apocalypse Ravi" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/aramintha/icon.png", Name: "Aramintha" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/arbiter-vildred/icon.png", Name: "Arbiter Vildred" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/armin/icon.png", Name: "Armin" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/arowell/icon.png", Name: "Arowell" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/assassin-cartuja/icon.png", Name: "Assassin Cartuja" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/assassin-cidd/icon.png", Name: "Assassin Cidd" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/assassin-coli/icon.png", Name: "Assassin Coli" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/auxiliary-lots/icon.png", Name: "Auxiliary Lots" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/azalea/icon.png", Name: "Azalea" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/baal-sezan/icon.png", Name: "Baal Sezan" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/baiken/icon.png", Name: "Baiken" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/basar/icon.png", Name: "Basar" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/bask/icon.png", Name: "Bask" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/bellona/icon.png", Name: "Bellona" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/blaze-dingo/icon.png", Name: "Blaze Dingo" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/blood-blade-karin/icon.png", Name: "Blood Blade Karin" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/butcher-corps-inquisitor/icon.png", Name: "Butcher Corps Inquisitor" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/captain-rikoris/icon.png", Name: "Captain Rikoris" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/carmainerose/icon.png", Name: "Carmainerose" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/carrot/icon.png", Name: "Carrot" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/cartuja/icon.png", Name: "Cartuja" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/cecilia/icon.png", Name: "Cecilia" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/celeste/icon.png", Name: "Celeste" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/celestial-mercedes/icon.png", Name: "Celestial Mercedes" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/cermia/icon.png", Name: "Cermia" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/challenger-dominiel/icon.png", Name: "Challenger Dominiel" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/champion-zerato/icon.png", Name: "Champion Zerato" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/chaos-inquisitor/icon.png", Name: "Chaos Inquisitor" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/chaos-sect-axe/icon.png", Name: "Chaos Sect Axe" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/charles/icon.png", Name: "Charles" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/charlotte/icon.png", Name: "Charlotte" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/chloe/icon.png", Name: "Chloe" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/church-of-ilryos-axe/icon.png", Name: "Church Of Ilryos Axe" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/cidd/icon.png", Name: "Cidd" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/clarissa/icon.png", Name: "Clarissa" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/coli/icon.png", Name: "Coli" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/commander-lorina/icon.png", Name: "Commander Lorina" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/corvus/icon.png", Name: "Corvus" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/crescent-moon-rin/icon.png", Name: "Crescent Moon Rin" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/crimson-armin/icon.png", Name: "Crimson Armin" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/crozet/icon.png", Name: "Crozet" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/dark-corvus/icon.png", Name: "Dark Corvus" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/desert-jewel-basar/icon.png", Name: "Desert Jewel Basar" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/destina/icon.png", Name: "Destina" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/diene/icon.png", Name: "Diene" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/dingo/icon.png", Name: "Dingo" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/dizzy/icon.png", Name: "Dizzy" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/dominiel/icon.png", Name: "Dominiel" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/doris/icon.png", Name: "Doris" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/elson/icon.png", Name: "Elson" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/enott/icon.png", Name: "Enott" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/falconer-kluri/icon.png", Name: "Falconer Kluri" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/fallen-cecilia/icon.png", Name: "Fallen Cecilia" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/fighter-maya/icon.png", Name: "Fighter Maya" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/furious/icon.png", Name: "Furious" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/general-purrgis/icon.png", Name: "General Purrgis" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/gloomyrain/icon.png", Name: "Gloomyrain" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/guider-aither/icon.png", Name: "Guider Aither" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/gunther/icon.png", Name: "Gunther" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/haste/icon.png", Name: "Haste" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/hazel/icon.png", Name: "Hazel" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/helga/icon.png", Name: "Helga" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/hurado/icon.png", Name: "Hurado" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/iseria/icon.png", Name: "Iseria" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/jecht/icon.png", Name: "Jecht" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/jena/icon.png", Name: "Jena" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/judge-kise/icon.png", Name: "Judge Kise" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/judith/icon.png", Name: "Judith" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/karin/icon.png", Name: "Karin" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/kayron/icon.png", Name: "Kayron" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/ken/icon.png", Name: "Ken" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/khawazu/icon.png", Name: "Khawazu" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/kikirat-v2/icon.png", Name: "Kikirat V2" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/kiris/icon.png", Name: "Kiris" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/kise/icon.png", Name: "Kise" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/kitty-clarissa/icon.png", Name: "Kitty Clarissa" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/kluri/icon.png", Name: "Kluri" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/krau/icon.png", Name: "Krau" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/leo/icon.png", Name: "Leo" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/lidica/icon.png", Name: "Lidica" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/lilias/icon.png", Name: "Lilias" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/lilibet/icon.png", Name: "Lilibet" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/lorina/icon.png", Name: "Lorina" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/lots/icon.png", Name: "Lots" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/ludwig/icon.png", Name: "Ludwig" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/luluca/icon.png", Name: "Luluca" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/luna/icon.png", Name: "Luna" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/maid-chloe/icon.png", Name: "Maid Chloe" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/martial-artist-ken/icon.png", Name: "Martial Artist Ken" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/mascot-hazel/icon.png", Name: "Mascot Hazel" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/maya/icon.png", Name: "Maya" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/mercedes/icon.png", Name: "Mercedes" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/mirsa/icon.png", Name: "Mirsa" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/mistychain/icon.png", Name: "Mistychain" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/montmorancy/icon.png", Name: "Montmorancy" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/mucacha/icon.png", Name: "Mucacha" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/nemunas/icon.png", Name: "Nemunas" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/otillie/icon.png", Name: "Otillie" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/pearlhorizon/icon.png", Name: "Pearlhorizon" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/purrgis/icon.png", Name: "Purrgis" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/pyllis/icon.png", Name: "Pyllis" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/ras/icon.png", Name: "Ras" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/ravi/icon.png", Name: "Ravi" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/requiemroar/icon.png", Name: "Requiemroar" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/researcher-carrot/icon.png", Name: "Researcher Carrot" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/righteous-thief-roozid/icon.png", Name: "Righteous Thief Roozid" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/rikoris/icon.png", Name: "Rikoris" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/rima/icon.png", Name: "Rima" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/rin/icon.png", Name: "Rin" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/roaming-warrior-leo/icon.png", Name: "Roaming Warrior Leo" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/romann/icon.png", Name: "Romann" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/roozid/icon.png", Name: "Roozid" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/rose/icon.png", Name: "Rose" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/ruele-of-light/icon.png", Name: "Ruele Of Light" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/sage-baal-sezan/icon.png", Name: "Sage Baal Sezan" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/schuri/icon.png", Name: "Schuri" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/seaside-bellona/icon.png", Name: "Seaside Bellona" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/serila/icon.png", Name: "Serila" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/sez/icon.png", Name: "Sez" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/shadow-rose/icon.png", Name: "Shadow Rose" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/shooting-star-achates/icon.png", Name: "Shooting Star Achates" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/sigret/icon.png", Name: "Sigret" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/silk/icon.png", Name: "Silk" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/silver-blade-aramintha/icon.png", Name: "Silver Blade Aramintha" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/sol/icon.png", Name: "Sol" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/specimen-sez/icon.png", Name: "Specimen Sez" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/specter-tenebria/icon.png", Name: "Specter Tenebria" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/surin/icon.png", Name: "Surin" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/sven/icon.png", Name: "Sven" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/tamarinne/icon.png", Name: "Tamarinne" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/taranor-guard/icon.png", Name: "Taranor Guard" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/taranor-royal-guard/icon.png", Name: "Taranor Royal Guard" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/tenebria/icon.png", Name: "Tenebria" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/tieria/icon.png", Name: "Tieria" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/tywin/icon.png", Name: "Tywin" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/vildred/icon.png", Name: "Vildred" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/violet/icon.png", Name: "Violet" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/vivian/icon.png", Name: "Vivian" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/wanda/icon.png", Name: "Wanda" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/wanderer-silk/icon.png", Name: "Wanderer Silk" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/watcher-schuri/icon.png", Name: "Watcher Schuri" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/yufine/icon.png", Name: "Yufine" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/yuna/icon.png", Name: "Yuna" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/zeno/icon.png", Name: "Zeno" },
+            { imageUrl: "https://assets.epicsevendb.com/hero/zerato/icon.png", Name: "Zerato" }
+        ]
+        function refresh_result() {
+            if ($("#you_speed_1").val() != "") {
+                if ($("#enemy_cr_1").val() != "")
+                    $("#enemy_speed_1").html(Math.ceil($("#you_speed_1").val() / 100 * $("#enemy_cr_1").val()));
+                if ($("#enemy_cr_2").val() != "")
+                    $("#enemy_speed_2").html(Math.ceil($("#you_speed_1").val() / 100 * $("#enemy_cr_2").val()));
+                if ($("#enemy_cr_3").val() != "")
+                    $("#enemy_speed_3").html(Math.ceil($("#you_speed_1").val() / 100 * $("#enemy_cr_3").val()));
+            } else {
+                $("#enemy_speed_1").html("—");
+                $("#enemy_speed_2").html("—");
+                $("#enemy_speed_3").html("—");
+            }
+            $("#result_text").empty();
+            var r = "";
+            var e1 = $("#enemy_unit_1").val();
+            var hp1 = $("#enemy_hp_1").val() != "" ? " - " + $("#enemy_hp_1").val() + " HP" : "";
+            var a1 = $("#enemy_arti_1").val() != "" ? " - " + $("#enemy_arti_1").val() : "";
+            var s1 = $("#enemy_speed_1").text() != "—" ? " - " + $("#enemy_speed_1").text() + " speed" : "";
+            var i1 = $("#enemy_info_1").val() != "" ? " - " + $("#enemy_info_1").val() : "";
+            var e2 = $("#enemy_unit_2").val();
+            var hp2 = $("#enemy_hp_2").val() != "" ? " - " + $("#enemy_hp_2").val() + " HP" : "";
+            var a2 = $("#enemy_arti_2").val() != "" ? " - " + $("#enemy_arti_2").val() : "";
+            var s2 = $("#enemy_speed_2").text() != "—" ? " - " + $("#enemy_speed_2").text() + " speed" : "";
+            var i2 = $("#enemy_info_2").val() != "" ? " - " + $("#enemy_info_2").val() : "";
+            var e3 = $("#enemy_unit_3").val();
+            var hp3 = $("#enemy_hp_3").val() != "" ? " - " + $("#enemy_hp_3").val() + " HP" : "";
+            var a3 = $("#enemy_arti_3").val() != "" ? " - " + $("#enemy_arti_3").val() : "";
+            var s3 = $("#enemy_speed_3").text() != "—" ? " - " + $("#enemy_speed_3").text() + " speed" : "";
+            var i3 = $("#enemy_info_3").val() != "" ? " - " + $("#enemy_info_3").val() : "";
+            if (e1 != "")
+                r += e1 + s1 + hp1 + a1 + i1 + "\r\n";
+            if (e2 != "")
+                r += e2 + s2 + hp2 + a2 + i2 + "\r\n";
+            if (e3 != "")
+                r += e3 + s3 + hp3 + a3 + i3;
+            $("#result_text").html(r);
+        }
+        $().ready(function () {
+            populateHeroesSelect($("#your_unit"));
+            populateHeroesSelect($("#enemy_unit_1"));
+            populateHeroesSelect($("#enemy_unit_2"));
+            populateHeroesSelect($("#enemy_unit_3"));
+        })
+        $(function () {
+            if (localStorage.getItem("theme") == "light")
+                $("body").removeClass("dark-theme");
+            $("#dark_theme_btn").on("click", function (e) {
+                e.preventDefault();
+                localStorage.setItem("theme", "dark");
+                $("body").addClass("dark-theme");
+            })
+            $("#light_theme_btn").on("click", function (e) {
+                e.preventDefault();
+                localStorage.setItem("theme", "light");
+                $("body").removeClass("dark-theme");
+            })
+            $('.selectpicker').selectpicker();
+            $("input[type=number]").on("change", function () {
+                refresh_result();
+            })
+            $('.selectpicker').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                if ($(this).attr("id") == "your_unit") {
+                    $("#you_speed_1").val(localStorage.getItem($("#your_unit").val()));
+                }
+                refresh_result();
+            });
+            $(".enemy_hp").on("change", function (e) {
+                var v = $(this).val();
+                var t = $(this).data("target");
+                if (t != undefined && t != "") {
+                    var target = $("#" + t);
+                    target.html(v != "" ? v + " HP" : "—");
+                }
+                refresh_result();
+            })
+            $(".enemy_info").on("change", function (e) {
+                refresh_result();
+            })
+            $("#you_speed_1").on("change", function (e) {
+                var your_unit = $("#your_unit").val();
+                var your_speed = $("#you_speed_1").val();
+                if (your_unit != "")
+                    localStorage.setItem(your_unit, your_speed);
+                refresh_result();
+            })
+        })
+        function populateHeroesSelect(select) {
+            $.each(heroList, function (number, hero) {
+                select.append('<option data-content="<img class=\'hero-icon\' src=\'' + hero.imageUrl + '\' /><span>' + hero.Name + '</span>">' + hero.Name + '</option>')
+            })
+        }
+        function myFunction() {
+            var copyText = document.getElementById("result_text");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copié!";
+        }
+        function outFunc() {
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copié dans le presse-papier";
+        }
+    </script>
+</body>
+
+</html>
